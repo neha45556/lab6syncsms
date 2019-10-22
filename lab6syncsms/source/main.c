@@ -11,7 +11,8 @@
 #include <avr/interrupt.h>
 
 volatile unsigned char TimerFlag = 0;
-
+unsigned char B0 = 0x00;
+#define A0 (~PINA & 0x01)
 unsigned long _avr_timer_M = 1;
 unsigned long _avr_timer_cntcurr = 0;
 
@@ -52,23 +53,46 @@ void TimerSet(unsinged long M){
     _avr_timer_cntcurr = _avr_timer_M;
 }
 
-enum States { Start, LedOn1, LedOn2, LedOn3} state;
+enum States { Start, LedOn1, LedOn2, LedOn3, stop, wait} state;
 
 void Tick_Blink(){
-    unsigned char B0 = 0x00;
+   
     switch(state){
         case Start:
             state = LedOn1;
+            if(A0){
+                state = stop;
+            }
             break;
         case LedOn1:
             state = LedOn2;
+            if(A0){
+                state = stop;
+            }
             break;
         case LedOn2:
             state = LedOn3;
+            if(A0){
+                state = stop;
+            }
             break;
         case LedOn3:
             state = LedOn1;
+            if(A0){
+                state = stop;
+            }
             break;
+        case stop:
+            if(!A0){
+                state = wait;
+            }
+            break;
+        case wait:
+            if(A0){
+                state = start;
+            }
+            break;
+            
     }
     switch(state){
         case Start:
@@ -83,17 +107,20 @@ void Tick_Blink(){
         case LedOn3:
             B0 = 0x04;
             break;
+        case stop:
+            break;
+        case wait:
+            break;
+            
     }
     PORTB = B0;
 }
-             
-        
 
 
 void main() {
    
-    DDRB = 0xFF;
-    PORTB = 0x00;
+    DDRB = 0xFF;    DDRA = 0x00;
+    PORTB = 0x00;   PORTA = 0xFF;
     TimerSet(1000);
     TimerOn();
     unsigned char tmpB = 0x00;
