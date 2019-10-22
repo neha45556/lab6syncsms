@@ -59,37 +59,54 @@ void Tick_Blink(){
    
     switch(state){
         case Start:
-            state = LedOn1;
             if(A0){
                 state = stop;
+            }
+            else{
+               state = LedOn1;
             }
             break;
         case LedOn1:
-            state = LedOn2;
+            
             if(A0){
                 state = stop;
+            }
+            else{
+                state = LedOn2;
             }
             break;
         case LedOn2:
-            state = LedOn3;
+            
             if(A0){
                 state = stop;
             }
+            else{
+                state = LedOn3;
+            }
             break;
         case LedOn3:
-            state = LedOn1;
+            
             if(A0){
                 state = stop;
+            }
+            else{
+                state = LedOn1;
             }
             break;
         case stop:
             if(!A0){
                 state = wait1;
             }
+            else{
+                state = stop;
+            }
             break;
         case wait1:
             if(A0){
                 state = Start;
+            }
+            else{
+                state = wait1;
             }
             break;
             
