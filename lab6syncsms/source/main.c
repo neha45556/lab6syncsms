@@ -48,7 +48,7 @@ ISR(TIMER1_COMPA_vect) {
     }
 }
 
-void TimerSet(unsinged long M){
+void TimerSet(unsigned long M){
     _avr_timer_M = M;
     _avr_timer_cntcurr = _avr_timer_M;
 }
@@ -89,7 +89,7 @@ void Tick_Blink(){
             break;
         case wait1:
             if(A0){
-                state = start;
+                state = Start;
             }
             break;
             
