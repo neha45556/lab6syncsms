@@ -87,7 +87,7 @@ void Tick_Blink(){
                 state = wait1;
             }
             break;
-        case wait:
+        case wait1:
             if(A0){
                 state = start;
             }
