@@ -52,8 +52,46 @@ void TimerSet(unsinged long M){
     _avr_timer_cntcurr = _avr_timer_M;
 }
 
+enum States { Start, LedOn1, LedOn2, LedOn3} state;
+
+void Tick_Blink(){
+    unsigned char B0 = 0x00;
+    switch(state){
+        case Start:
+            state = LedOn1;
+            break;
+        case LedOn1:
+            state = LedOn2;
+            break;
+        case LedOn2:
+            state = LedOn3;
+            break;
+        case LedOn3:
+            state = LedOn1;
+            break;
+    }
+    switch(state){
+        case Start:
+            B0 = 0;
+            break;
+        case LedOn1:
+            B0 = 0x01; 
+            break;
+        case LedOn2:
+            B0 = 0x02;
+            break;
+        case LedOn3:
+            B0 = 0x04;
+            break;
+    }
+    PORTB = B0;
+}
+             
+        
+
 
 void main() {
+   
     DDRB = 0xFF;
     PORTB = 0x00;
     TimerSet(1000);
@@ -62,6 +100,7 @@ void main() {
     while(1){
         tmpB = ~tmpB;
         PORTB = tmpB;
+        Tick_Blink();
         while(!TimerFlag);
             TimerFlag = 0;
      }
