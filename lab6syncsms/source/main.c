@@ -53,7 +53,7 @@ void TimerSet(unsinged long M){
     _avr_timer_cntcurr = _avr_timer_M;
 }
 
-enum States { Start, LedOn1, LedOn2, LedOn3, stop, wait} state;
+enum States { Start, LedOn1, LedOn2, LedOn3, stop, wait1} state;
 
 void Tick_Blink(){
    
@@ -84,7 +84,7 @@ void Tick_Blink(){
             break;
         case stop:
             if(!A0){
-                state = wait;
+                state = wait1;
             }
             break;
         case wait:
@@ -109,7 +109,7 @@ void Tick_Blink(){
             break;
         case stop:
             break;
-        case wait:
+        case wait1:
             break;
             
     }
